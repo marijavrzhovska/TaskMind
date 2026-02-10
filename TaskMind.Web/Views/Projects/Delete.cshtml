@@ -1,0 +1,44 @@
+﻿@model TaskMind.Domain.Models.Project
+
+@{
+    ViewData["Title"] = "Delete Project";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-danger">Delete Project</h1>
+
+    <div class="alert alert-warning">
+        <strong>Warning!</strong> Are you sure you want to delete this project? This action cannot be undone.
+    </div>
+
+    <div class="card shadow-sm mb-3">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Title</dt>
+                <dd class="col-sm-9">@Model.Title</dd>
+
+                <dt class="col-sm-3">Description</dt>
+                <dd class="col-sm-9">@Model.Description</dd>
+
+                <dt class="col-sm-3">Deadline</dt>
+                <dd class="col-sm-9">
+                    @(Model.Deadline.HasValue? Model.Deadline.Value.ToString("dd/MM/yyyy") : "-")
+                </dd>
+
+                <dt class="col-sm-3">Owner</dt>
+                <dd class="col-sm-9">
+                    @(Model.Owner != null ? $"{Model.Owner.FirstName} {Model.Owner.LastName}" : "No Owner")
+                </dd>
+
+                <dt class="col-sm-3">Number of Tasks</dt>
+                <dd class="col-sm-9">(@Model.Tasks?.Count ?? 0)</dd>
+            </dl>
+        </div>
+    </div>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Delete Project</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

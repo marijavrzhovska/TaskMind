@@ -1,0 +1,38 @@
+﻿@model TaskMind.Domain.Models.Comment
+
+@{
+    ViewData["Title"] = "Delete Comment";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-danger">Delete Comment</h1>
+
+    <div class="card shadow-sm p-4">
+        <h5 class="card-title">Comment Information</h5>
+        <hr />
+
+        <dl class="row">
+            <dt class="col-sm-3">Content</dt>
+            <dd class="col-sm-9">@Model.Content</dd>
+
+            <dt class="col-sm-3">Created At</dt>
+            <dd class="col-sm-9">
+                @(Model.CreatedAt?.ToLocalTime().ToString("dd/MM/yyyy HH:mm") ?? "Not set")
+            </dd>
+
+            <dt class="col-sm-3">Task</dt>
+            <dd class="col-sm-9">@(Model.Task?.Title ?? "No task")</dd>
+
+            <dt class="col-sm-3">User</dt>
+            <dd class="col-sm-9">@(Model.User?.Email ?? "Unknown user")</dd>
+        </dl>
+
+        <div class="mt-3">
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
+            </form>
+        </div>
+    </div>
+</div>

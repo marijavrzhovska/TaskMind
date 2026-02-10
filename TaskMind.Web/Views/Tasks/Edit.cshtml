@@ -1,0 +1,75 @@
+﻿@model TaskMind.Domain.Models.Task
+
+@{
+    ViewData["Title"] = "Edit Task";
+}
+
+<h2>Edit Task</h2>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <strong>Task Details</strong>
+    </div>
+    <div class="card-body">
+        <form asp-action="Edit">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Status" class="form-label"></label>
+                <select asp-for="Status" class="form-select" asp-items="ViewBag.Status"></select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DueDate" class="form-label"></label>
+                <input asp-for="DueDate" type="date" class="form-control" />
+                <span asp-validation-for="DueDate" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Projectid" class="form-label"></label>
+                <select asp-for="Projectid" class="form-select" asp-items="ViewBag.Projectid"></select>
+                <span asp-validation-for="Projectid" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="AssignedUserId" class="form-label"></label>
+                <select asp-for="AssignedUserId" class="form-select" asp-items="ViewBag.AssignedUserId"></select>
+                <span asp-validation-for="AssignedUserId" class="text-danger"></span>
+            </div>
+
+            <input type="hidden" asp-for="Id" />
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+<h4>Add Tag:</h4>
+<form asp-action="AddTag" method="post" class="d-inline-flex gap-2">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="taskId" value="@Model.Id" />
+    <select name="selectedTagId" class="form-select w-auto">
+        <option value="">-- Choose Tag --</option>
+        @foreach (var tag in ViewBag.Tags as List<TaskMind.Domain.Models.Tag>)
+        {
+            <option value="@tag.Id">@tag.Name</option>
+        }
+    </select>
+    <button type="submit" class="btn btn-sm btn-primary">Add</button>
+</form>

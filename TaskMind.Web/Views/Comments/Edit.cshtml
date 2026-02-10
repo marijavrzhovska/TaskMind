@@ -1,0 +1,53 @@
+﻿@model TaskMind.Domain.Models.Comment
+
+@{
+    ViewData["Title"] = "Edit Comment";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Edit Comment</h1>
+
+    <div class="card shadow-sm p-4">
+        <form asp-action="Edit" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="Content" class="form-label"></label>
+                <input asp-for="Content" class="form-control" />
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="CreatedAt" class="form-label"></label>
+                <input asp-for="CreatedAt" type="datetime-local" class="form-control" />
+                <span asp-validation-for="CreatedAt" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="TaskId" class="form-label"></label>
+                <select asp-for="TaskId" class="form-select" asp-items="ViewBag.TaskId"></select>
+                <span asp-validation-for="TaskId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="UserId" class="form-label"></label>
+                <select asp-for="UserId" class="form-select" asp-items="ViewBag.UserId"></select>
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+
+            <input type="hidden" asp-for="Id" />
+
+            <div class="d-flex justify-content-between">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

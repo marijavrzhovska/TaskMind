@@ -1,0 +1,62 @@
+﻿@model IEnumerable<TaskMind.Domain.Models.Project>
+
+@{
+    ViewData["Title"] = "Projects";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>All Projects</h1>
+        <div class="d-flex mb-3 align-items-center">
+            <a asp-action="Create" class="btn btn-primary btn-lg me-3">Create New Project</a>
+
+            @if (ViewBag.CurrentRole == "Admin" || ViewBag.CurrentRole == "ProjectManager")
+            {
+                <form asp-action="ImportFromGitHub" method="post" class="d-flex align-items-center me-2">
+                    <input type="text" name="username" placeholder="GitHub username" class="form-control me-2" />
+                    <button type="submit" class="btn btn-success btn-lg">Import from GitHub</button>
+                </form>
+
+                <form asp-action="ViewGitHubInsights" method="get" class="d-flex gap-2 align-items-center">
+                    <input type="text" name="username" class="form-control w-auto" placeholder="GitHub username" />
+                    <button type="submit" class="btn btn-primary btn-sm">View Insights</button>
+                </form>
+            }
+            else
+            {
+                <button class="btn btn-success btn-lg me-2" disabled>Import from GitHub (Admin only)</button>
+                <button class="btn btn-primary btn-sm" disabled>View Insights (Admin only)</button>
+            }
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">@TempData["Success"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">@TempData["Error"]</div>
+        }
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var project in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@project.Title</h5>
+                        <p class="card-text text-truncate">@project.Description</p>
+                        <p class="mb-1"><strong>Deadline:</strong> @(project.Deadline?.ToString("dd/MM/yyyy") ?? "-")</p>
+                        <p class="mb-3"><strong>Owner:</strong> @(project.Owner != null ? project.Owner.FirstName + " " + project.Owner.LastName : "No Owner")</p>
+                        <div class="mt-auto">
+                            <a asp-action="Edit" asp-route-id="@project.Id" class="btn btn-warning btn-sm me-2">Edit</a>
+                            <a asp-action="Details" asp-route-id="@project.Id" class="btn btn-info btn-sm me-2">Details</a>
+                            <a asp-action="Delete" asp-route-id="@project.Id" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

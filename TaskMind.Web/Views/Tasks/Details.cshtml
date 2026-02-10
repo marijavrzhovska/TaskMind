@@ -1,0 +1,100 @@
+﻿@model TaskMind.Domain.Models.Task
+
+@{
+    ViewData["Title"] = "Task Details";
+}
+
+<h2>Task Details</h2>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <strong>Task Info</strong>
+    </div>
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Title)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.Title)</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Description)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.Description)</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Status)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.Status)</dd>
+
+            <dt class="col-sm-2">@Html.DisplayNameFor(model => model.DueDate)</dt>
+            <dd class="col-sm-10">@Html.DisplayFor(model => model.DueDate)</dd>
+
+            <dt class="col-sm-2">Project</dt>
+            <dd class="col-sm-10">@((Model.Project?.Title) ?? "No project")</dd>
+
+            <dt class="col-sm-2">Assigned User</dt>
+            <dd class="col-sm-10">@((Model.AssignedUser?.Email) ?? "Unassigned")</dd>
+        </dl>
+    </div>
+</div>
+
+<!-- Attachments -->
+<div class="card mb-4">
+    <div class="card-header"><strong>Attachments</strong></div>
+    <div class="card-body">
+        @if (Model.Files != null && Model.Files.Any())
+        {
+            <ul class="list-group list-group-flush">
+                @foreach (var file in Model.Files)
+                {
+                    <li class="list-group-item">
+                        <a href="@file.FileUrl" target="_blank">@file.FullName</a>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No files attached.</p>
+        }
+    </div>
+</div>
+
+<!-- Comments -->
+<div class="card mb-4">
+    <div class="card-header"><strong>Comments</strong></div>
+    <div class="card-body">
+        @if (Model.Comments != null && Model.Comments.Any())
+        {
+            <ul class="list-group list-group-flush">
+                @foreach (var comment in Model.Comments)
+                {
+                    <li class="list-group-item">
+                        <strong>@comment.User?.FirstName @comment.User?.LastName:</strong>
+                        @comment.Content
+                        <span class="text-muted float-end">(@comment.CreatedAt?.ToLocalTime().ToString("g"))</span>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No comments yet.</p>
+        }
+    </div>
+</div>
+
+<!-- Add Comment Form -->
+<div class="card mb-4">
+    <div class="card-header"><strong>Add a Comment</strong></div>
+    <div class="card-body">
+        <form asp-controller="Comments" asp-action="AddComment" method="post">
+            <input type="hidden" name="taskId" value="@Model.Id" />
+            <div class="mb-3">
+                <textarea name="content" class="form-control" placeholder="Add a comment..." rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">Add Comment</button>
+        </form>
+    </div>
+</div>
+
+<!-- Actions -->
+<div class="mb-4">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">Edit Task</a>
+    <a asp-action="Index" class="btn btn-secondary btn-sm">Back to List</a>
+</div>

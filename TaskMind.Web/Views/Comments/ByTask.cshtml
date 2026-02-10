@@ -1,0 +1,48 @@
+﻿@model TaskMind.Domain.Models.Task
+
+@{
+    ViewData["Title"] = "Comments for Task";
+}
+
+<h2>Comments for Task: @Model.Title</h2>
+
+<h4>Description: @Model.Description</h4>
+
+<hr />
+
+<!-- Список на коментари -->
+<h3>Comments</h3>
+@if (Model.Comments != null && Model.Comments.Any())
+{
+    <ul class="list-group">
+        @foreach (var comment in Model.Comments.OrderByDescending(c => c.CreatedAt))
+        {
+            <li class="list-group-item">
+                <strong>@(comment.User?.FirstName ?? "Unknown") @(comment.User?.LastName ?? ""):</strong>
+                @comment.Content
+                <br />
+                <small class="text-muted">@comment.CreatedAt?.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</small>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No comments yet.</p>
+}
+
+<hr />
+
+<h3>Add Comment</h3>
+<form asp-action="CreateCommentForTask" method="post">
+    <input type="hidden" asp-for="Id" name="taskId" value="@Model.Id" />
+    <div class="form-group">
+        <label for="Content">Comment</label>
+        <textarea class="form-control" name="content" rows="3" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Add Comment</button>
+</form>
+
+<div class="mt-3">
+    <a asp-controller="Tasks" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">Back to Task</a>
+</div>

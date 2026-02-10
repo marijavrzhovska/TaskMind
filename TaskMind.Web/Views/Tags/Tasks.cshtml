@@ -1,0 +1,26 @@
+﻿@model IEnumerable<TaskMind.Domain.Models.Task>
+
+<h2>Tasks for Tag</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Assigned User</th>
+            <th>Comments Count</th>
+            <th>Deadline</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model)
+        {
+            <tr>
+                <td>@task.Title</td>
+                <td>@(task.AssignedUser != null ? task.AssignedUser.FirstName + " " + task.AssignedUser.LastName : "Unassigned")</td>
+                <td>@(task.Comments?.Count ?? 0)</td>
+                <td>@(task.DueDate?.ToString("dd/MM/yyyy") ?? "-")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
